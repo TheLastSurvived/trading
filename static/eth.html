@@ -71,7 +71,7 @@
         });
 
         // Подключение к WebSocket
-        const ws = new WebSocket('ws://localhost:8000/ws-eth');
+        const ws = new WebSocket('ws://trading-xuww.onrender.com/ws-eth');
         let currentPrice = null;
 
         ws.onmessage = (event) => {

@@ -71,7 +71,7 @@
         });
 
         // Подключение к WebSocket
-        const ws = new WebSocket('ws://localhost:8000/ws-btc');
+        const ws = new WebSocket('ws://trading-xuww.onrender.com/ws-btc');
         let currentPrice = null;
 
         ws.onmessage = (event) => {
