@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>График криптовалют</title>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="d-flex justify-content-center py-3 border-bottom">
+          <ul class="nav nav-pills">
+            <li class="nav-item"><a href="/" class="nav-link">Биткоин</a></li>
+            <li class="nav-item"><a href="/eth" class="nav-link">Эфириум </a></li>
+            <li class="nav-item"><a href="/ltc" class="nav-link">Лайткоин </a></li>
+          </ul>
+        </header>
+      </div>
+    <div class="container my-2">
+        <h1 class="text-center">График стоимости LTC/USDT</h1>
+        <div class="row">
+            <div class="col">
+                <canvas id="cryptoChart" width="100%"></canvas>
+            </div>
+        </div>
+        
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-streaming"></script>
+
+    <script>
+        // Регистрируем плагин
+        Chart.register(ChartStreaming);
+
+        // Создаем график
+        const ctx = document.getElementById('cryptoChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: 'LTC/USDT Цена',
+                    data: [], // Данные о цене
+                    borderColor: 'green',
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'realtime', // Используем шкалу реального времени
+                        realtime: {
+                            duration: 60000, // Отображаем последние 60 секунд
+                            refresh: 1000, // Обновление каждую секунду
+                            delay: 3000,
+                            onRefresh: (chart) => {
+                                // Добавляем новые данные
+                                chart.data.datasets[0].data.push({
+                                    x: Date.now(), // Текущее время
+                                    y: currentPrice // Текущая цена
+                                });
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+
+        // Подключение к WebSocket
+        const ws = new WebSocket('ws://localhost:8000/ws-ltc');
+        let currentPrice = null;
+
+        ws.onmessage = (event) => {
+            // Получаем данные о цене
+            currentPrice = parseFloat(event.data);
+        };
+    </script>
+</body>
+</html>
