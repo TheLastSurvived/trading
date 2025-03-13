@@ -71,9 +71,9 @@
         });
 
         // Подключение к WebSocket
-        const ws = new WebSocket('ws://localhost:10000/ws-btc');
+        const ws = new WebSocket('ws://localhost:8000/ws-btc');
         let currentPrice = null;
-
+        
         ws.onmessage = (event) => {
             // Получаем данные о цене
             currentPrice = parseFloat(event.data);

@@ -71,7 +71,7 @@
         });
 
         // Подключение к WebSocket
-        const ws = new WebSocket('ws://localhost:10000/ws-ltc');
+        const ws = new WebSocket('ws://localhost:8000/ws-ltc');
         let currentPrice = null;
 
         ws.onmessage = (event) => {
